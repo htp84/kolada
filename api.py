@@ -12,7 +12,6 @@ https://github.com/Hypergene/kolada/blob/master/README.rst
 """
 
 import requests
-from custom_types import A
 
 BASE = 'http://api.kolada.se/v2/'
 DATA = 'data/'
@@ -50,7 +49,7 @@ class Kpi:
         return data
 
     @classmethod
-    def metadata(cls, filter_kpis=''):
+    def metadata(cls, filter_kpis='') -> list:
         '''
         metadata
         '''
@@ -108,7 +107,7 @@ class Kpi:
 
 
     @classmethod
-    def data_yearly(cls, kpi_list, years):
+    def data_yearly(cls, kpi_list: str, years: str) -> list:
         '''
         kpi
         '''
@@ -142,7 +141,7 @@ class Kpi:
             return data
 
     @classmethod
-    def data_per_municipality(cls, kpi_list, municipalities):
+    def data_per_municipality(cls, kpi_list: str, municipalities: str) -> list:
         '''
         kpi
         '''
@@ -176,7 +175,7 @@ class Kpi:
             return data
 
     @classmethod
-    def metadata_search(cls, search_string: str, filter_kpis='', search_column='title') -> A:
+    def metadata_search(cls, search_string: str, filter_kpis='', search_column='title') -> list:
         '''
         Search kpi
         '''
@@ -259,7 +258,7 @@ class Municipality():
     '''
 
     @classmethod
-    def groups(cls):
+    def groups(cls) -> list:
         '''Kommungruppsid + Kommungruppsnamn'''
         # url = 'http://api.kolada.se/v2/municipality_groups'
         url = BASE + MUNICIPALITY_GROUP
@@ -269,7 +268,7 @@ class Municipality():
         return data
 
     @classmethod
-    def group_members(cls):
+    def group_members(cls) -> list:
         '''Kommungruppsid + kommunid'''
         # url = 'http://api.kolada.se/v2/municipality_groups'
         url = BASE + MUNICIPALITY_GROUP
@@ -280,7 +279,7 @@ class Municipality():
         return data
 
     @classmethod
-    def municipalities(cls, filter_municipalities='', municipality_id='n'):
+    def municipalities(cls, filter_municipalities='', municipality_id='n') -> list:
         '''Hämtar kommuner samt deras metadata. Sätts municipality_id till yes eller ja
         hämtas endast en lista av kommunernas id'''
 
@@ -306,7 +305,7 @@ class Municipality():
         return data
 
     @classmethod
-    def data_per_year(cls, municipalities, years):
+    def data_per_year(cls, municipalities: str, years: str) -> list:
         '''
         kpi
         '''
@@ -355,11 +354,14 @@ if __name__ == '__main__':
     #data = Kpi.metadata('k')
     #data = Municipality.municipalities('K')
     data = Municipality.groups()
+    print(data)
+    '''
     with open('municipalitygroups.csv', 'w') as out:
         csv_out = csv.writer(out)
         csv_out.writerow(['MunicipalityGroupId', 'MunicipalityGroupName'])
         for row in data:
             csv_out.writerow(row)
+    '''
     '''
     mu = ['0860','0821','0834','0840','0861','0862','0880','0881','0882','0883','0884','0885']
     years = ['2013','2014','2015','2016','2017']
