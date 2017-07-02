@@ -1,0 +1,1 @@
+The purpuse of this api is to make it easier to download data from Kolada. The API uses the requests module and is compabilable with >python 3.3
