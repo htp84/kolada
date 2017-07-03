@@ -10,6 +10,7 @@ För mer informattion om version 2 av koladas api se:
 https://github.com/Hypergene/kolada/blob/master/README.rst
 
 """
+__version__ = 0.1
 
 import requests
 
