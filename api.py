@@ -54,6 +54,8 @@ class Kpi:
         '''
         metadata
         '''
+        if not isinstance(filter_kpis, str):
+            raise TypeError('filter_kpis must be  a string')
         filter_kpis = filter_kpis.upper()
         url = BASE + KPI
         response = requests.get(url).json()
@@ -351,10 +353,11 @@ if __name__ == '__main__':
     #                        search_column='operating_area') # type: A
     #X = Kpi.metadata().translate()
     #data = Kpi.data_yearly('N00002', '2016,2017')
-    import csv
+    #import csv
     #data = Kpi.metadata('k')
     #data = Municipality.municipalities('K')
-    data = Municipality.groups()
+    #data = Municipality.groups()
+    data = Kpi.metadata([])
     print(data)
     '''
     with open('municipalitygroups.csv', 'w') as out:
