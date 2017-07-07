@@ -10,7 +10,7 @@ För mer informattion om version 2 av koladas api se:
 https://github.com/Hypergene/kolada/blob/master/README.rst
 
 """
-__version__ = 0.1
+__version__ = 0.2
 
 import requests
 
@@ -110,11 +110,18 @@ class Kpi:
 
 
     @classmethod
-    def data_yearly(cls, kpi_list: str, years: str) -> list:
+    def data_yearly(cls, kpis: str, years: str) -> list:
         '''
-        kpi
+        data per given kpi,
+
+        if the method returns None then eihter there is no KPI with the given 
+        ID or there is no data for the given KPI during the given year
         '''
-        url = BASE + DATA + KPI + '/' + kpi_list + '/year/' + years
+        if not isinstance(kpis, str):
+            raise TypeError('kpis must be a string, e.g. \'N00002, N00003\'.')
+        elif not isinstance(years, str):
+            raise TypeError('years must be  a string, e.g. "2016')
+        url = BASE + DATA + KPI + '/' + kpis + '/year/' + years
         print(url)
         result = None
         data = []
@@ -144,11 +151,18 @@ class Kpi:
             return data
 
     @classmethod
-    def data_per_municipality(cls, kpi_list: str, municipalities: str) -> list:
+    def data_per_municipality(cls, kpis: str, municipalities: str) -> list:
         '''
-        kpi
+        data per given munnicipality
+
+        if the method returns None then eihter there is no KPI with the given 
+        ID or there is no data for the given KPI for the given municipality
         '''
-        url = BASE + DATA + KPI + '/' + kpi_list + '/' + MUNICIPALITY + '/' + municipalities
+        if not isinstance(kpis, str):
+            raise TypeError('kpis must be a string, e.g. \'N00002, N00003\'.')
+        elif not isinstance(municipalities, str):
+            raise TypeError('municipalities must be a string, e.g. \'0860\'.')
+        url = BASE + DATA + KPI + '/' + kpis + '/' + MUNICIPALITY + '/' + municipalities
         print(url)
         result = None
         data = []
@@ -182,6 +196,12 @@ class Kpi:
         '''
         Search kpi
         '''
+        if not isinstance(search_string, str):
+            raise TypeError('the search string must be a string, e.g. \'Räddningstjänst\'.')
+        elif not isinstance(filter_kpis, str):
+            raise TypeError('filter_kpis must be a string, either \'\', \'K\' or \'L\'.')
+        elif not isinstance(search_column, str):
+            raise TypeError('search_column must be a string, e.g. \'operating_area\'.')
         def helper_f(col):
             '''
             helper function
@@ -251,7 +271,7 @@ class Kpi:
         elif search_column == 'description':
             data = helper_f(12)
         else:
-            data = ['emelie är söt']
+            data = None
 
         return data
 
@@ -285,7 +305,10 @@ class Municipality():
     def municipalities(cls, filter_municipalities='', municipality_id='n') -> list:
         '''Hämtar kommuner samt deras metadata. Sätts municipality_id till yes eller ja
         hämtas endast en lista av kommunernas id'''
-
+        if not isinstance(filter_municipalities, str):
+            raise TypeError('filter_municipalities must be a string')
+        elif not isinstance(municipality_id, str):
+            raise TypeError('municipality_id must be  a string')
         url = BASE + MUNICIPALITY
         response = requests.get(url)
         values = response.json()['values']
@@ -312,6 +335,10 @@ class Municipality():
         '''
         kpi
         '''
+        if not isinstance(municipalities, str):
+            raise TypeError('municipalities must be a string')
+        elif not isinstance(years, str):
+            raise TypeError('years must be  a string')
         url = BASE + DATA + MUNICIPALITY + '/' + municipalities + '/' + 'year' + '/' + years
         print(url)
         result = None
@@ -349,17 +376,18 @@ class Municipality():
 
 
 if __name__ == '__main__':
-    #X = Kpi.metadata_search(search_string='räddning', filter_kpis='k',
-    #                        search_column='operating_area') # type: A
-    #X = Kpi.metadata().translate()
+    #data = Kpi.metadata_search(search_string='räddning', filter_kpis='k', search_column='description') # type: A
     #data = Kpi.data_yearly('N00002', '2016,2017')
-    #import csv
     #data = Kpi.metadata('k')
     #data = Municipality.municipalities('K')
+    data = Municipality.data_per_year('0860','2017')
     #data = Municipality.groups()
-    data = Kpi.metadata([])
+    #data = Kpi.metadata([])
+    #data = Kpi.data_yearly(['N00002'], '2016')
+    #data = Kpi.data_per_municipality('N00002', '086')
     print(data)
     '''
+    import csv
     with open('municipalitygroups.csv', 'w') as out:
         csv_out = csv.writer(out)
         csv_out.writerow(['MunicipalityGroupId', 'MunicipalityGroupName'])
