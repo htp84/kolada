@@ -18,7 +18,33 @@ class Kpi:
     '''
     kpi
     '''
-    
+
+    @classmethod
+    def kpi(cls, filter_kpis='') -> list:
+        '''
+        Kpi id and name
+        '''
+        if not isinstance(filter_kpis, str):
+            raise TypeError('filter_kpis must be  a string')
+        filter_kpis = filter_kpis.upper()
+        url = BASE + KPI
+        response = requests.get(url).json()
+        values = response['values']
+        if filter_kpis == '':
+            data = [(group['id'],
+                     group['title'])
+                    for group in values]
+        if filter_kpis == 'K':
+            data = [(group['id'],
+                     group['title'])
+                    for group in values if group['municipality_type'] == 'K']
+        if filter_kpis == 'L':
+            data = [(group['id'],
+                     group['title'])
+                    for group in values if group['municipality_type'] == 'L']
+
+        return data
+
     @classmethod
     def group_names(cls) -> list:
         '''kpigruppsid + kpigruppsnamn'''
