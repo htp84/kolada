@@ -1,4 +1,5 @@
 import kolada
 
-test = kolada.Kpi.metadata()
-print(test)
+metadata = kolada.Kpi.metadata()
+kpi = kolada.Kpi.kpi()
+print(kpi)
