@@ -28,8 +28,7 @@ class Kpi:
             raise TypeError('filter_kpis must be  a string')
         filter_kpis = filter_kpis.upper()
         url = BASE + KPI
-        response = requests.get(url).json()
-        values = response['values']
+        values = requests.get(url).json()['values']
         if filter_kpis == '':
             data = [(group['id'],
                      group['title'])
@@ -50,8 +49,7 @@ class Kpi:
         '''kpigruppsid + kpigruppsnamn'''
         # url = 'http://api.kolada.se/v2/kpi_groups'
         url = BASE + KPI_GROUP
-        response = requests.get(url)
-        values = response.json()['values']
+        values = requests.get(url).json()['values']
         data = [(group['id'], group['title']) for group in values]
         return data
     # print(kpiGroupsTitle())
@@ -61,8 +59,7 @@ class Kpi:
         '''kpigruppsid + kpiid'''
         # url = 'http://api.kolada.se/v2/kpi_groups'
         url = BASE + KPI_GROUP
-        response = requests.get(url)
-        values = response.json()['values']
+        values = requests.get(url).json()['values']
         data = [(group['id'], members['member_id'])
                 for group in values for members in group['members']]
         return data
@@ -76,8 +73,7 @@ class Kpi:
             raise TypeError('filter_kpis must be  a string')
         filter_kpis = filter_kpis.upper()
         url = BASE + KPI
-        response = requests.get(url).json()
-        values = response['values']
+        values = requests.get(url).json()['values']
         if filter_kpis == '':
             data = [(group['id'],
                      group['prel_publication_date'],
@@ -171,7 +167,7 @@ class Kpi:
     @classmethod
     def data_per_municipality(cls, kpis: str, municipalities: str) -> list:
         '''
-        data per given munnicipality
+        data per given municipality
 
         if the method returns None then eihter there is no KPI with the given 
         ID or there is no data for the given KPI for the given municipality
@@ -220,6 +216,7 @@ class Kpi:
             raise TypeError('filter_kpis must be a string, either \'\', \'K\' or \'L\'.')
         elif not isinstance(search_column, str):
             raise TypeError('search_column must be a string, e.g. \'operating_area\'.')
+
         def helper_f(col):
             '''
             helper function
@@ -235,10 +232,7 @@ class Kpi:
 
         if search_column == 'title':
             url = BASE + KPI + '?title=' + search_string
-            response = requests.get(url).json()
-            values = response['values']
-            #print(url)
-            #print(values)
+            values = requests.get(url).json()['values']
             if filter_kpis == '':
                 data = [(group['id'],
                          group['prel_publication_date'],
@@ -303,18 +297,15 @@ class Municipality():
         '''Kommungruppsid + Kommungruppsnamn'''
         # url = 'http://api.kolada.se/v2/municipality_groups'
         url = BASE + MUNICIPALITY_GROUP
-        response = requests.get(url)
-        values = response.json()['values']
+        values = requests.get(url).json()['values']
         data = [(group['id'], group['title']) for group in values]
         return data
 
     @classmethod
     def group_members(cls) -> list:
         '''Kommungruppsid + kommunid'''
-        # url = 'http://api.kolada.se/v2/municipality_groups'
         url = BASE + MUNICIPALITY_GROUP
-        response = requests.get(url)
-        values = response.json()['values']
+        values = requests.get(url).json()['values']
         data = [(group['id'], members['member_id'])
                 for group in values for members in group['members']]
         return data
@@ -328,8 +319,7 @@ class Municipality():
         elif not isinstance(municipality_id, str):
             raise TypeError('municipality_id must be  a string')
         url = BASE + MUNICIPALITY
-        response = requests.get(url)
-        values = response.json()['values']
+        values = requests.get(url).json()['values']
         if filter_municipalities == '':
             if municipality_id.startswith('y') or municipality_id.startswith('j'):
                 data = [(group['id']) for group in values]
@@ -391,6 +381,3 @@ class Municipality():
 #    @classmethod
 #    def data_per_year(cls, ous, years):
 #        url = BASE + DATA + OU + ous
-
-
-
