@@ -12,4 +12,4 @@ Supports Python **3.3+**
 
 For more information about kolada on github see [hypergene/kolada](https://github.com/Hypergene/kolada)
 
-For more infromation on kolada in general see Koladas [homepage](https://www.kolada.se)
+For more information on kolada in general see Koladas [homepage](https://www.kolada.se)
