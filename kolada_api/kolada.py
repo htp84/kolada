@@ -13,7 +13,7 @@ KPI = 'kpi'
 KPI_GROUP = 'kpi_groups'
 MUNICIPALITY = 'municipality'
 MUNICIPALITY_GROUP = 'municipality_groups'
-#OU = 
+#OU =
 
 class Kpi:
     '''
@@ -26,7 +26,7 @@ class Kpi:
         Kpi id and name
         '''
         if not isinstance(filter_kpis, str):
-            raise TypeError('filter_kpis must be  a string')
+            raise TypeError('filter_kpis must be a string')
         filter_kpis = filter_kpis.upper()
         url = BASE + KPI
         values = requests.get(url).json()['values']
@@ -48,17 +48,14 @@ class Kpi:
     @classmethod
     def group_names(cls) -> list:
         '''kpigruppsid + kpigruppsnamn'''
-        # url = 'http://api.kolada.se/v2/kpi_groups'
         url = BASE + KPI_GROUP
         values = requests.get(url).json()['values']
         data = [(group['id'], group['title']) for group in values]
         return data
-    # print(kpiGroupsTitle())
 
     @classmethod
     def group(cls) -> list:
         '''kpigruppsid + kpiid'''
-        # url = 'http://api.kolada.se/v2/kpi_groups'
         url = BASE + KPI_GROUP
         values = requests.get(url).json()['values']
         data = [(group['id'], members['member_id'])
@@ -81,7 +78,6 @@ class Kpi:
             data = [_metadata(group) for group in values if group['municipality_type'] == 'K']
         if filter_kpis == 'L':
             data = [_metadata(group) for group in values if group['municipality_type'] == 'L']
-
         return data
 
 
@@ -101,11 +97,11 @@ class Kpi:
         print(url)
         result = None
         data = []
-        while result is None:  # 1
+        while result is None:
             try:
                 response = requests.get(url).json()
                 if response['count'] == 0:
-                    break  # 2
+                    break
                 else:
                     values = response['values']
                     page = [(group['kpi'],
@@ -117,13 +113,11 @@ class Kpi:
                             if member['value'] is not None]
                     data = data + page
                     url = response['next_page']
-                    # print(url)
             except KeyError:
-                break  # 4
+                break
         if data == []:
             return None
         else:
-            #data = [tuple(l) for l in data[0:]]
             return data
 
     @classmethod
@@ -142,11 +136,11 @@ class Kpi:
         print(url)
         result = None
         data = []
-        while result is None:  # 1
+        while result is None:
             try:
                 response = requests.get(url).json()
                 if response['count'] == 0:
-                    break  # 2
+                    break
                 else:
                     values = response['values']
                     page = [(group['kpi'],
@@ -158,13 +152,11 @@ class Kpi:
                             if member['value'] is not None]
                     data = data + page
                     url = response['next_page']
-                    # print(url)
             except KeyError:
-                break  # 4
+                break
         if data == []:
             return None
         else:
-            #data = [tuple(l) for l in data[0:]]
             return data
 
     @classmethod
@@ -207,7 +199,6 @@ class Kpi:
             data = helper_f(12)
         else:
             data = None
-
         return data
 
 class Municipality():
@@ -218,7 +209,6 @@ class Municipality():
     @classmethod
     def groups(cls) -> list:
         '''Kommungruppsid + Kommungruppsnamn'''
-        # url = 'http://api.kolada.se/v2/municipality_groups'
         url = BASE + MUNICIPALITY_GROUP
         values = requests.get(url).json()['values']
         data = [(group['id'], group['title']) for group in values]
@@ -258,7 +248,6 @@ class Municipality():
                 data = [(group['id']) for group in values if group['id'].startswith('00')]
             else:
                 data = [(group['id'], group['title']) for group in values if  group['id'].startswith('00')]
-
         return data
 
     @classmethod
@@ -274,11 +263,11 @@ class Municipality():
         print(url)
         result = None
         data = []
-        while result is None:  # 1
+        while result is None:
             try:
                 response = requests.get(url).json()
                 if response['count'] == 0:
-                    break  # 2
+                    break
                 else:
                     values = response['values']
                     page = [(group['kpi'],
@@ -290,13 +279,11 @@ class Municipality():
                             if member['value'] is not None]
                     data = data + page
                     url = response['next_page']
-                    # print(url)
             except KeyError:
-                break  # 4
+                break
         if data == []:
             return None
         else:
-            #data = [tuple(l) for l in data[0:]]
             return data
 
 #class Ou:
