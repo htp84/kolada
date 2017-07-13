@@ -5,6 +5,7 @@
 __version__ = 0.2
 
 import requests
+from kolada_api._json.structure import _metadata
 
 BASE = 'http://api.kolada.se/v2/'
 DATA = 'data/'
@@ -75,50 +76,11 @@ class Kpi:
         url = BASE + KPI
         values = requests.get(url).json()['values']
         if filter_kpis == '':
-            data = [(group['id'],
-                     group['prel_publication_date'],
-                     group['municipality_type'],
-                     group['publ_period'],
-                     group['operating_area'],
-                     group['auspices'],
-                     group['publication_date'],
-                     group['perspective'],
-                     group['is_divided_by_gender'],
-                     group['ou_publication_date'],
-                     str(group['has_ou_data']),
-                     group['title'],
-                     group['description'])
-                    for group in values]
+            data = [_metadata(group) for group in values]
         if filter_kpis == 'K':
-            data = [(group['id'],
-                     group['prel_publication_date'],
-                     group['municipality_type'],
-                     group['publ_period'],
-                     group['operating_area'],
-                     group['auspices'],
-                     group['publication_date'],
-                     group['perspective'],
-                     group['is_divided_by_gender'],
-                     group['ou_publication_date'],
-                     str(group['has_ou_data']),
-                     group['title'],
-                     group['description'])
-                    for group in values if group['municipality_type'] == 'K']
+            data = [_metadata(group) for group in values if group['municipality_type'] == 'K']
         if filter_kpis == 'L':
-            data = [(group['id'],
-                     group['prel_publication_date'],
-                     group['municipality_type'],
-                     group['publ_period'],
-                     group['operating_area'],
-                     group['auspices'],
-                     group['publication_date'],
-                     group['perspective'],
-                     group['is_divided_by_gender'],
-                     group['ou_publication_date'],
-                     str(group['has_ou_data']),
-                     group['title'],
-                     group['description'])
-                    for group in values if group['municipality_type'] == 'L']
+            data = [_metadata(group) for group in values if group['municipality_type'] == 'L']
 
         return data
 
@@ -234,50 +196,11 @@ class Kpi:
             url = BASE + KPI + '?title=' + search_string
             values = requests.get(url).json()['values']
             if filter_kpis == '':
-                data = [(group['id'],
-                         group['prel_publication_date'],
-                         group['municipality_type'],
-                         group['publ_period'],
-                         group['operating_area'],
-                         group['auspices'],
-                         group['publication_date'],
-                         group['perspective'],
-                         group['is_divided_by_gender'],
-                         group['ou_publication_date'],
-                         str(group['has_ou_data']),
-                         group['title'],
-                         group['description'])
-                        for group in values]
+                data = [_metadata(group) for group in values]
             if filter_kpis.upper() == 'K':
-                data = [(str(group['id']),
-                         str(group['prel_publication_date']),
-                         str(group['municipality_type']),
-                         str(group['publ_period']),
-                         str(group['operating_area']),
-                         str(group['auspices']),
-                         str(group['publication_date']),
-                         str(group['perspective']),
-                         str(group['is_divided_by_gender']),
-                         str(group['ou_publication_date']),
-                         str(group['has_ou_data']),
-                         str(group['title']),
-                         str(group['description']))
-                        for group in values if group['municipality_type'] == 'K']
+                data = [_metadata(group) for group in values if group['municipality_type'] == 'K']
             if filter_kpis.upper() == 'L':
-                data = [(group['id'],
-                         group['prel_publication_date'],
-                         group['municipality_type'],
-                         group['publ_period'],
-                         group['operating_area'],
-                         group['auspices'],
-                         group['publication_date'],
-                         group['perspective'],
-                         group['is_divided_by_gender'],
-                         group['ou_publication_date'],
-                         str(group['has_ou_data']),
-                         group['title'],
-                         group['description'])
-                        for group in values if group['municipality_type'] == 'L']
+                data = [_metadata(group) for group in values if group['municipality_type'] == 'L']
         elif search_column == 'operating_area':
             data = helper_f(4)
         elif search_column == 'description':
