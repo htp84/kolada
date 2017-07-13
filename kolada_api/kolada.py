@@ -5,7 +5,7 @@
 __version__ = 0.2
 
 import requests
-from kolada_api._json.structure import _metadata
+from kolada_api._json.structure import _metadata, _id_title, _data
 
 BASE = 'http://api.kolada.se/v2/'
 DATA = 'data/'
@@ -21,7 +21,7 @@ class Kpi:
     '''
 
     @classmethod
-    def kpi(cls, filter_kpis='') -> list:
+    def kpi(cls, filter_kpis='', as_list='no') -> list:
         '''
         Kpi id and name
         '''
@@ -31,18 +31,13 @@ class Kpi:
         url = BASE + KPI
         values = requests.get(url).json()['values']
         if filter_kpis == '':
-            data = [(group['id'],
-                     group['title'])
-                    for group in values]
-        if filter_kpis == 'K':
-            data = [(group['id'],
-                     group['title'])
-                    for group in values if group['municipality_type'] == 'K']
-        if filter_kpis == 'L':
-            data = [(group['id'],
-                     group['title'])
-                    for group in values if group['municipality_type'] == 'L']
-
+            data = [_id_title(group) for group in values]
+        elif filter_kpis == 'K':
+            data = [_id_title(group) for group in values if group['municipality_type'] == 'K']
+        elif filter_kpis == 'L':
+            data = [_id_title(group) for group in values if group['municipality_type'] == 'L']
+        if as_list.lower() == 'yes':
+            data = [id[0] for id in data]
         return data
 
     @classmethod
@@ -50,7 +45,7 @@ class Kpi:
         '''kpigruppsid + kpigruppsnamn'''
         url = BASE + KPI_GROUP
         values = requests.get(url).json()['values']
-        data = [(group['id'], group['title']) for group in values]
+        data = [_id_title(group) for group in values]
         return data
 
     @classmethod
@@ -104,11 +99,7 @@ class Kpi:
                     break
                 else:
                     values = response['values']
-                    page = [(group['kpi'],
-                             group['municipality'],
-                             group['period'],
-                             member['value'],
-                             member['gender'])
+                    page = [_data(group, member)
                             for group in values for member in group['values']
                             if member['value'] is not None]
                     data = data + page
@@ -133,7 +124,6 @@ class Kpi:
         elif not isinstance(municipalities, str):
             raise TypeError('municipalities must be a string, e.g. \'0860\'.')
         url = BASE + DATA + KPI + '/' + kpis + '/' + MUNICIPALITY + '/' + municipalities
-        print(url)
         result = None
         data = []
         while result is None:
@@ -143,11 +133,7 @@ class Kpi:
                     break
                 else:
                     values = response['values']
-                    page = [(group['kpi'],
-                             group['municipality'],
-                             group['period'],
-                             member['value'],
-                             member['gender'])
+                    page = [_data(group, member)
                             for group in values for member in group['values']
                             if member['value'] is not None]
                     data = data + page
@@ -160,7 +146,7 @@ class Kpi:
             return data
 
     @classmethod
-    def metadata_search(cls, search_string: str, filter_kpis='', search_column='title') -> list:
+    def metadata_search(cls, search_string: str, filter_kpis='', search_column='title', as_list='no') -> list:
         '''
         Search kpi
         '''
@@ -199,6 +185,8 @@ class Kpi:
             data = helper_f(12)
         else:
             data = None
+        if as_list.lower() == 'yes' and data is not None:
+            data = [id[0] for id in data]
         return data
 
 class Municipality():
@@ -211,7 +199,7 @@ class Municipality():
         '''Kommungruppsid + Kommungruppsnamn'''
         url = BASE + MUNICIPALITY_GROUP
         values = requests.get(url).json()['values']
-        data = [(group['id'], group['title']) for group in values]
+        data = [_id_title(group) for group in values]
         return data
 
     @classmethod
@@ -237,17 +225,17 @@ class Municipality():
             if municipality_id.startswith('y') or municipality_id.startswith('j'):
                 data = [(group['id']) for group in values]
             else:
-                data = [(group['id'], group['title']) for group in values]
+                data = [_id_title(group) for group in values]
         if filter_municipalities == 'K':
             if municipality_id.startswith('y') or municipality_id.startswith('j'):
                 data = [(group['id']) for group in values if not group['id'].startswith('00')]
             else:
-                data = [(group['id'], group['title']) for group in values if not group['id'].startswith('00')]
+                data = [_id_title(group) for group in values if not group['id'].startswith('00')]
         if filter_municipalities == 'L':
             if municipality_id.startswith('y') or municipality_id.startswith('j'):
                 data = [(group['id']) for group in values if group['id'].startswith('00')]
             else:
-                data = [(group['id'], group['title']) for group in values if  group['id'].startswith('00')]
+                data = [_id_title(group) for group in values if  group['id'].startswith('00')]
         return data
 
     @classmethod
@@ -270,11 +258,7 @@ class Municipality():
                     break
                 else:
                     values = response['values']
-                    page = [(group['kpi'],
-                             group['municipality'],
-                             group['period'],
-                             member['value'],
-                             member['gender'])
+                    page = [_data(group, member)
                             for group in values for member in group['values']
                             if member['value'] is not None]
                     data = data + page
