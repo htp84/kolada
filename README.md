@@ -5,9 +5,10 @@ The purpuse of this api is to provide an easy way to download data from Kolada u
 Supports Python **3.3+**
 
 ```python
->>> import kolada
->>> data = kolada.Municipality.data_per_year('0860','2017')
->>> print(data)
+>>> from kolada_api import Kpi, Municipality
+>>> data_m = Municipality.data_per_year('0860','2017')
+>>> data_k = Kpi.data_per_year('N00002', '2017')
+>>> print(data_m, data_k)
 ```
 
 For more information about kolada on github see [hypergene/kolada](https://github.com/Hypergene/kolada)
