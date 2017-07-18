@@ -1,3 +1,4 @@
+https://travis-ci.org/htp84/kolada.svg?branch=master
 ## Kolada
 
 The purpuse of this api is to provide an easy way to download data from Kolada using Python 3. The API uses the [requests](https://github.com/requests/requests) module.
