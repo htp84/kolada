@@ -14,9 +14,15 @@ def _metadata(group):
              group['title'],
              group['description'])
 
-def _id_title(group):
-    return (group['id'],
-            group['title'])
+def _id_title(group, inner_type):
+    if inner_type.lower() == 'tuple':
+        return (group['id'],
+                group['title'])
+    elif inner_type.lower() == 'list':
+        return [group['id'],
+                group['title']]
+    else:
+        raise KeyError('inner_type can only be \'tuple\' or \'list\'.')
 
 def _data(group, member):
     return (group['kpi'],

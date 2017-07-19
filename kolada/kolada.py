@@ -2,10 +2,8 @@
 """
 
 """
-__version__ = 0.2
-
 import requests
-from kolada_api._json.structure import _metadata, _id_title, _data
+from kolada.json_.structure import _metadata, _id_title, _data
 
 BASE = 'http://api.kolada.se/v2/'
 DATA = 'data/'
@@ -16,36 +14,85 @@ MUNICIPALITY_GROUP = 'municipality_groups'
 #OU =
 
 class Kpi:
-    '''
-    kpi
-    '''
+    """
+    
+    """
 
     @classmethod
-    def kpi(cls, filter_kpis='', as_list='no') -> list:
-        '''
-        Kpi id and name
-        '''
+    def kpi(cls, filter_kpis='', **kwargs) -> list:
+        """
+        Method that based on the parameters returns either kpi id and kpi name, kpi id or kpi name
+
+        Parameters
+        ----------
+        filter_kpis : string, optional
+                      Provides a possibilty to filters the kpis. 
+                      \'\' is the default option and it returns all kpis
+                      If \'K\' is passed only municipality kpis are returned
+                      If \'L\' is passed only county kpis are returned\n
+        inner_type : string, keyword argument
+                     Provides a possibilty to decide the inner type
+                     \'tuple\' is the default option and returns a list of tuples
+                     \'list\' returns a list of lists\n
+        id_or_name : string, keyword argument
+                     Provides a possibilty to only get the kpi id or the kpi name as a list
+                     '' is the default option and it returns both kpi id and kpi name according to the choices made in the other parameters
+                     \'id\' returns only the kpi id's as a list. The returned list depends on the choice in fílter_kpis but not inner_type 
+                     \'name\' returns only the kpi names's as a list. The returned list depends on the choice in fílter_kpis but not inner_type   
+        
+        Returns
+        -------
+        list of tuples
+                      [(\'id1\', \'name1\'), (\'id2\', \'name2\')...]
+        or
+        list of lists
+                      [[\'id1\', \'name1\'], [\'id2\', \'name2\']...]
+        or
+        list
+            [\'id1\', \'id2\'...] 
+        or 
+        list
+            [\'name1\', \'name2\'...]
+        """
         if not isinstance(filter_kpis, str):
             raise TypeError('filter_kpis must be a string')
+        if  filter_kpis.upper() != 'K' and filter_kpis.upper() != 'L' and filter_kpis != '':
+            raise KeyError('filter_kpis must be eiter \'\', \'L\' or \'K\'')        
+        if 'inner_type' not in kwargs:
+            inner_type = 'tuple'            
+        else:
+            inner_type = kwargs['inner_type']
+            if not isinstance(inner_type, str):
+                raise TypeError('inner_type must be a string')
+        if 'id_or_name' not in kwargs:
+            id_or_name = ''
+        else:
+            id_or_name = kwargs['id_or_name']
+            if not isinstance(id_or_name, str):
+                raise TypeError('id_or_name must be a string')
+            if id_or_name != '' and id_or_name.lower() != 'id' and id_or_name.lower() != 'name':
+                raise KeyError('id_or_name must either be \'\', \'id\' or \'name\'')            
         filter_kpis = filter_kpis.upper()
         url = BASE + KPI
         values = requests.get(url).json()['values']
         if filter_kpis == '':
-            data = [_id_title(group) for group in values]
+            data = [_id_title(group, inner_type) for group in values]
         elif filter_kpis == 'K':
-            data = [_id_title(group) for group in values if group['municipality_type'] == 'K']
+            data = [_id_title(group, inner_type) for group in values if group['municipality_type'] == 'K']
         elif filter_kpis == 'L':
-            data = [_id_title(group) for group in values if group['municipality_type'] == 'L']
-        if as_list.lower() == 'yes':
+            data = [_id_title(group, inner_type) for group in values if group['municipality_type'] == 'L']
+        if id_or_name == 'id':
             data = [id[0] for id in data]
+        elif id_or_name == 'name':
+            data = [name[1] for name in data]
         return data
 
     @classmethod
-    def group_names(cls) -> list:
+    def group_names(cls, inner_type='tuple') -> list:
         '''kpigruppsid + kpigruppsnamn'''
         url = BASE + KPI_GROUP
         values = requests.get(url).json()['values']
-        data = [_id_title(group) for group in values]
+        data = [_id_title(group, inner_type) for group in values]
         return data
 
     @classmethod
@@ -77,7 +124,7 @@ class Kpi:
 
 
     @classmethod
-    def data_yearly(cls, kpis: str, years: str) -> list:
+    def data_per_year(cls, kpis: str, years: str) -> list:
         '''
         data per given kpi,
 
@@ -89,7 +136,6 @@ class Kpi:
         elif not isinstance(years, str):
             raise TypeError('years must be  a string, e.g. "2016')
         url = BASE + DATA + KPI + '/' + kpis + '/year/' + years
-        print(url)
         result = None
         data = []
         while result is None:
@@ -195,11 +241,11 @@ class Municipality():
     '''
 
     @classmethod
-    def groups(cls) -> list:
+    def groups(cls, inner_type='tuple') -> list:
         '''Kommungruppsid + Kommungruppsnamn'''
         url = BASE + MUNICIPALITY_GROUP
         values = requests.get(url).json()['values']
-        data = [_id_title(group) for group in values]
+        data = [_id_title(group, inner_type) for group in values]
         return data
 
     @classmethod
@@ -212,7 +258,7 @@ class Municipality():
         return data
 
     @classmethod
-    def municipalities(cls, filter_municipalities='', municipality_id='n') -> list:
+    def municipalities(cls, filter_municipalities='', municipality_id='n', inner_type='tuple') -> list:
         '''Hämtar kommuner samt deras metadata. Sätts municipality_id till yes eller ja
         hämtas endast en lista av kommunernas id'''
         if not isinstance(filter_municipalities, str):
@@ -225,17 +271,17 @@ class Municipality():
             if municipality_id.startswith('y') or municipality_id.startswith('j'):
                 data = [(group['id']) for group in values]
             else:
-                data = [_id_title(group) for group in values]
+                data = [_id_title(group, inner_type) for group in values]
         if filter_municipalities == 'K':
             if municipality_id.startswith('y') or municipality_id.startswith('j'):
                 data = [(group['id']) for group in values if not group['id'].startswith('00')]
             else:
-                data = [_id_title(group) for group in values if not group['id'].startswith('00')]
+                data = [_id_title(group, inner_type) for group in values if not group['id'].startswith('00')]
         if filter_municipalities == 'L':
             if municipality_id.startswith('y') or municipality_id.startswith('j'):
                 data = [(group['id']) for group in values if group['id'].startswith('00')]
             else:
-                data = [_id_title(group) for group in values if  group['id'].startswith('00')]
+                data = [_id_title(group, inner_type) for group in values if  group['id'].startswith('00')]
         return data
 
     @classmethod
@@ -248,7 +294,6 @@ class Municipality():
         elif not isinstance(years, str):
             raise TypeError('years must be  a string')
         url = BASE + DATA + MUNICIPALITY + '/' + municipalities + '/' + 'year' + '/' + years
-        print(url)
         result = None
         data = []
         while result is None:
