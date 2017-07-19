@@ -17,32 +17,32 @@ class TestPython_kolada_api(unittest.TestCase):
         with self.assertRaises(TypeError):
             Kpi.kpi(filter_kpis=1)
 
-    '''    
+        
     def test_001_something(self):
         """Test something."""
         with self.assertRaises(KeyError):
             Kpi.kpi(filter_kpis='s')
-    '''
+    
 
     def test_002_something(self):
         """Test something."""
         self.assertIsInstance(Kpi.kpi()[0], tuple)
     
-    '''
+    
     def test_003_something(self):
         """Test something."""
-        self.assertIsInstance(Kpi.kpi(inner_type='list')[0], list)
-
+        self.assertIsInstance(Kpi.kpi(filter_kpi = '', inner_type='list')[0], list)
+    
     def test_004_something(self):
         """Test something."""
         with self.assertRaises(KeyError):
-            Kpi.kpi(inner_type='str')
-    '''
+            Kpi.kpi(filter_kpi = '', inner_type='str')
+    
 
     def test_005_something(self):
         """Test something."""
         with self.assertRaises(TypeError):
-            Kpi.kpi(inner_type=1)
+            Kpi.kpi(filter_kpi = '', inner_type=1)
 
             
 
