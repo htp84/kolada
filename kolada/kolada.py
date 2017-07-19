@@ -54,6 +54,7 @@ class Kpi:
         list
             [\'name1\', \'name2\'...]
         """
+        data = None
         if not isinstance(filter_kpis, str):
             raise TypeError('filter_kpis must be a string')
         if  filter_kpis.upper() != 'K' and filter_kpis.upper() != 'L' and filter_kpis != '':
