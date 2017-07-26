@@ -17,7 +17,7 @@ setup(
     author="Henric Sundberg",
     author_email='henric.sundberg@gmail.com',
     url='https://github.com/htp84/kolada',
-    packages=find_packages(include=['kolada']),
+    packages=find_packages(),
     include_package_data=True,
     install_requires=requirements,
     license="MIT license",
