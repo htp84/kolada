@@ -1,18 +1,18 @@
 
 def _metadata(group):
-    return  (group['id'],
-             group['prel_publication_date'],
-             group['municipality_type'],
-             group['publ_period'],
-             group['operating_area'],
-             group['auspices'],
-             group['publication_date'],
-             group['perspective'],
-             group['is_divided_by_gender'],
-             group['ou_publication_date'],
+    return  (str(group['id']),
+             str(group['prel_publication_date']),
+             str(group['municipality_type']),
+             str(group['publ_period']),
+             str(group['operating_area']),
+             str(group['auspices']),
+             str(group['publication_date']),
+             str(group['perspective']),
+             str(group['is_divided_by_gender']),
+             str(group['ou_publication_date']),
              str(group['has_ou_data']),
-             group['title'],
-             group['description'])
+             str(group['title']),
+             str(group['description']))             
 
 def _id_title(group, inner_type):
     if inner_type.lower() == 'tuple':
