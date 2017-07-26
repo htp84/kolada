@@ -19,13 +19,13 @@ class Kpi:
     """
 
     @classmethod
-    def kpi(cls, filter_kpis='', **kwargs) -> list:
+    def kpi(cls, **kwargs) -> list:
         """
         Method that based on the parameters returns either kpi id and kpi name, kpi id or kpi name
 
         Parameters
         ----------
-        filter_kpis : string, optional
+        filter_kpis : string, keyword argument
                       Provides a possibilty to filters the kpis. 
                       \'\' is the default option and it returns all kpis
                       If \'K\' is passed only municipality kpis are returned
@@ -55,10 +55,14 @@ class Kpi:
             [\'name1\', \'name2\'...]
         """
         data = None
-        if not isinstance(filter_kpis, str):
-            raise TypeError('filter_kpis must be a string')
-        if  filter_kpis.upper() != 'K' and filter_kpis.upper() != 'L' and filter_kpis != '':
-            raise KeyError('filter_kpis must be eiter \'\', \'L\' or \'K\'')        
+        if 'filter_kpis' not in kwargs:
+            filter_kpis = ''
+        else:
+            filter_kpis = kwargs['filter_kpis']
+            if not isinstance(filter_kpis, str):
+                raise TypeError('filter_kpis must be a string')
+            if  filter_kpis.upper() != 'K' and filter_kpis.upper() != 'L' and filter_kpis != '':
+                raise KeyError('filter_kpis must be eiter \'\', \'L\' or \'K\'')        
         if 'inner_type' not in kwargs:
             inner_type = 'tuple'            
         else:
