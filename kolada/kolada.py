@@ -4,7 +4,7 @@
 """
 import requests
 from kolada.json_.structure import _metadata, _id_title, _data
-from kolada._controls import _control_kpi
+from kolada._control._controls import _control_kpi
 
 BASE = 'http://api.kolada.se/v2/'
 DATA = 'data/'
