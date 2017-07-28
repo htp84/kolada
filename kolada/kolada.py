@@ -4,6 +4,7 @@
 """
 import requests
 from kolada.json_.structure import _metadata, _id_title, _data
+from kolada._controls import _control_kpi
 
 BASE = 'http://api.kolada.se/v2/'
 DATA = 'data/'
@@ -23,61 +24,36 @@ class Kpi:
         """
         Method that based on the parameters returns either kpi id and kpi name, kpi id or kpi name
 
-        Parameters
-        ----------
-        filter_kpis : string, keyword argument
-                      Provides a possibilty to filters the kpis. 
-                      \'\' is the default option and it returns all kpis
-                      If \'K\' is passed only municipality kpis are returned
-                      If \'L\' is passed only county kpis are returned\n
-        inner_type : string, keyword argument
-                     Provides a possibilty to decide the inner type
-                     \'tuple\' is the default option and returns a list of tuples
-                     \'list\' returns a list of lists\n
-        id_or_name : string, keyword argument
-                     Provides a possibilty to only get the kpi id or the kpi name as a list
-                     '' is the default option and it returns both kpi id and kpi name according to the choices made in the other parameters
-                     \'id\' returns only the kpi id's as a list. The returned list depends on the choice in fílter_kpis but not inner_type 
-                     \'name\' returns only the kpi names's as a list. The returned list depends on the choice in fílter_kpis but not inner_type   
+        Args:
+        **Keyword arguments:
+            filter_kpis (str): Provides a possibilty to filters the kpis. 
+                \'\' is the default option and it returns all kpis
+                If \'K\' is passed only municipality kpis are returned
+                If \'L\' is passed only county kpis are returned\n
+            inner_type (str): Provides a possibilty to decide the inner type
+                \'tuple\' is the default option and returns a list of tuples
+                \'list\' returns a list of lists\n
+            id_or_name (str): Provides a possibilty to only get the kpi id or the kpi name as a list
+                '' is the default option and it returns both kpi id and kpi name according to the choices made in the other parameters
+                \'id\' returns only the kpi id's as a list. The returned list depends on the choice in fílter_kpis but not inner_type 
+                \'name\' returns only the kpi names's as a list. The returned list depends on the choice in fílter_kpis but not inner_type   
         
-        Returns
-        -------
-        list of tuples
-                      [(\'id1\', \'name1\'), (\'id2\', \'name2\')...]
-        or
-        list of lists
-                      [[\'id1\', \'name1\'], [\'id2\', \'name2\']...]
-        or
-        list
-            [\'id1\', \'id2\'...] 
-        or 
-        list
-            [\'name1\', \'name2\'...]
+        Returns:
+            list of tuples: [(\'id1\', \'name1\'), (\'id2\', \'name2\')...], default return type
+            
+            list of lists: [[\'id1\', \'name1\'], [\'id2\', \'name2\']...], if keyword argument
+            inner_type equals \'list\'
+            
+            list: [\'id1\', \'id2\'...] or [\'name1\', \'name2\'...] depending on 
+            keyword argument id_or_name equals \'id\' or \'name\'
+        
+        Raises:
+            TypeError: If keyword argument not is str
+            KeyError: If wrong key is supplied
+
         """
         data = None
-        if 'filter_kpis' not in kwargs:
-            filter_kpis = ''
-        else:
-            filter_kpis = kwargs['filter_kpis']
-            if not isinstance(filter_kpis, str):
-                raise TypeError('filter_kpis must be a string')
-            if  filter_kpis.upper() != 'K' and filter_kpis.upper() != 'L' and filter_kpis != '':
-                raise KeyError('filter_kpis must be eiter \'\', \'L\' or \'K\'')        
-        if 'inner_type' not in kwargs:
-            inner_type = 'tuple'            
-        else:
-            inner_type = kwargs['inner_type']
-            if not isinstance(inner_type, str):
-                raise TypeError('inner_type must be a string')
-        if 'id_or_name' not in kwargs:
-            id_or_name = ''
-        else:
-            id_or_name = kwargs['id_or_name']
-            if not isinstance(id_or_name, str):
-                raise TypeError('id_or_name must be a string')
-            if id_or_name != '' and id_or_name.lower() != 'id' and id_or_name.lower() != 'name':
-                raise KeyError('id_or_name must either be \'\', \'id\' or \'name\'')            
-        filter_kpis = filter_kpis.upper()
+        filter_kpis, inner_type, id_or_name = _control_kpi(kwargs)
         url = BASE + KPI
         values = requests.get(url).json()['values']
         if filter_kpis == '':
@@ -95,6 +71,7 @@ class Kpi:
     @classmethod
     def group_names(cls, inner_type='tuple') -> list:
         '''kpigruppsid + kpigruppsnamn'''
+        data = None
         url = BASE + KPI_GROUP
         values = requests.get(url).json()['values']
         data = [_id_title(group, inner_type) for group in values]
@@ -103,6 +80,7 @@ class Kpi:
     @classmethod
     def group(cls) -> list:
         '''kpigruppsid + kpiid'''
+        data = None
         url = BASE + KPI_GROUP
         values = requests.get(url).json()['values']
         data = [(group['id'], members['member_id'])
@@ -114,6 +92,7 @@ class Kpi:
         '''
         metadata
         '''
+        data = None
         if not isinstance(filter_kpis, str):
             raise TypeError('filter_kpis must be  a string')
         filter_kpis = filter_kpis.upper()
@@ -136,6 +115,7 @@ class Kpi:
         if the method returns None then eihter there is no KPI with the given 
         ID or there is no data for the given KPI during the given year
         '''
+        data = None
         if not isinstance(kpis, str):
             raise TypeError('kpis must be a string, e.g. \'N00002, N00003\'.')
         elif not isinstance(years, str):
@@ -170,6 +150,7 @@ class Kpi:
         if the method returns None then eihter there is no KPI with the given 
         ID or there is no data for the given KPI for the given municipality
         '''
+        data = None
         if not isinstance(kpis, str):
             raise TypeError('kpis must be a string, e.g. \'N00002, N00003\'.')
         elif not isinstance(municipalities, str):
@@ -201,6 +182,7 @@ class Kpi:
         '''
         Search kpi
         '''
+        data = None
         if not isinstance(search_string, str):
             raise TypeError('the search string must be a string, e.g. \'Räddningstjänst\'.')
         elif not isinstance(filter_kpis, str):
@@ -248,6 +230,7 @@ class Municipality():
     @classmethod
     def groups(cls, inner_type='tuple') -> list:
         '''Kommungruppsid + Kommungruppsnamn'''
+        data = None
         url = BASE + MUNICIPALITY_GROUP
         values = requests.get(url).json()['values']
         data = [_id_title(group, inner_type) for group in values]
@@ -256,6 +239,7 @@ class Municipality():
     @classmethod
     def group_members(cls) -> list:
         '''Kommungruppsid + kommunid'''
+        data = None
         url = BASE + MUNICIPALITY_GROUP
         values = requests.get(url).json()['values']
         data = [(group['id'], members['member_id'])
@@ -266,6 +250,7 @@ class Municipality():
     def municipalities(cls, filter_municipalities='', municipality_id='n', inner_type='tuple') -> list:
         '''Hämtar kommuner samt deras metadata. Sätts municipality_id till yes eller ja
         hämtas endast en lista av kommunernas id'''
+        data = None
         if not isinstance(filter_municipalities, str):
             raise TypeError('filter_municipalities must be a string')
         elif not isinstance(municipality_id, str):
@@ -294,6 +279,7 @@ class Municipality():
         '''
         kpi
         '''
+        data = None
         if not isinstance(municipalities, str):
             raise TypeError('municipalities must be a string')
         elif not isinstance(years, str):
