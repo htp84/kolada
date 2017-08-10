@@ -3,7 +3,7 @@
 
 """
 import requests
-from kolada.json_.structure import _metadata, _id_title, _data
+from kolada._json.structure import _metadata, _id_title, _data, _ou
 from kolada._control._controls import _control_kpi
 
 BASE = 'http://api.kolada.se/v2/'
@@ -12,7 +12,7 @@ KPI = 'kpi'
 KPI_GROUP = 'kpi_groups'
 MUNICIPALITY = 'municipality'
 MUNICIPALITY_GROUP = 'municipality_groups'
-#OU =
+OU = 'ou'
 
 class Kpi:
     """
@@ -306,8 +306,45 @@ class Municipality():
         else:
             return data
 
-#class Ou:
-#
+class Ou:
+    """
+
+    """
+
+    @classmethod
+    def ous(cls, search_title='', search_municipality=''):
+        """
+
+        """
+        data = []
+        if search_title == '' and search_municipality == '':
+            url = BASE + OU
+        elif search_title != '' and search_municipality == '':
+            url = BASE + OU + '?title=' + search_title
+        elif search_title == '' and search_municipality != '':
+            url = BASE + OU + '?municipality=' + search_municipality
+        elif search_title != '' and search_municipality != '':
+            url = BASE + OU + '?municipality=' + search_municipality + '&title=' + search_title
+        result = None
+        while result is None:
+            try:
+                response = requests.get(url).json()
+                if response['count'] == 0:
+                    break
+                else:
+                    values = response['values']
+                    page = [_ou(group) for group in values]
+                    data = data + page
+                    url = response['next_page']
+            except KeyError:
+                break
+        if data == []:
+            return None
+        else:
+            return data       
+
+
+
 #    @classmethod
 #    def data_per_year(cls, ous, years):
 #        url = BASE + DATA + OU + ous
