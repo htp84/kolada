@@ -3,5 +3,5 @@ old.txt
 .vscode/
 _testing.py
 .ipynb_checkpoints/
-.ipynb
+*.ipynb
 wheels/
