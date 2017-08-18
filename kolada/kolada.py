@@ -5,6 +5,7 @@
 import requests
 from kolada._json.structure import _metadata, _id_title, _data, _ou
 from kolada._control._controls import _control_kpi
+import kolada._json.structure as structure
 
 BASE = 'http://api.kolada.se/v2/'
 DATA = 'data/'
@@ -66,7 +67,7 @@ class Kpi:
             data = [id[0] for id in data]
         elif id_or_name == 'name':
             data = [name[1] for name in data]
-        return data
+        return data, structure.COLUMNS_ID_TITLE
 
     @classmethod
     def group_names(cls, inner_type='tuple') -> list:
@@ -104,7 +105,7 @@ class Kpi:
             data = [_metadata(group) for group in values if group['municipality_type'] == 'K']
         if filter_kpis == 'L':
             data = [_metadata(group) for group in values if group['municipality_type'] == 'L']
-        return data
+        return data, structure.COLUMNS_METADATA
 
 
     @classmethod
@@ -140,7 +141,7 @@ class Kpi:
         if data == []:
             return None
         else:
-            return data
+            return data, structure.COLUMNS_DATA
 
     @classmethod
     def data_per_municipality(cls, kpis: str, municipalities: str) -> list:
@@ -175,7 +176,7 @@ class Kpi:
         if data == []:
             return None
         else:
-            return data
+            return data, structure.COLUMNS_DATA
 
     @classmethod
     def metadata_search(cls, search_string: str, filter_kpis='', search_column='title', as_list='no') -> list:
