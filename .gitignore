@@ -1,4 +1,7 @@
 __pycache__/
 old.txt
 .vscode/
-kolada.egg-info/
+_testing.py
+.ipynb_checkpoints/
+.ipynb
+wheels/
