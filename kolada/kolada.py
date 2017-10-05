@@ -57,7 +57,7 @@ class Kpi:
         filter_kpis, inner_type, id_or_name = _control_kpi(kwargs)
         url = BASE + KPI
         values = requests.get(url).json()['values']
-        if filter_kpis == '':
+        if filter_kpis is None:
             data = [_id_title(group, inner_type) for group in values]
         elif filter_kpis == 'K':
             data = [_id_title(group, inner_type) for group in values if group['municipality_type'] == 'K']
