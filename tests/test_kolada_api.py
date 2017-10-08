@@ -6,43 +6,43 @@
 
 import unittest
 
-from kolada import Kpi, Municipality
-
+#from kolada import Kpi, Municipality
+from context import kolada
 
 class TestPython_kolada_api(unittest.TestCase):
     """Tests for `python_boilerplate` package."""
 
-    def test_000_something(self):
+    def Kpi_type_000(self):
         """Test something."""
         with self.assertRaises(TypeError):
-            Kpi.kpi(filter_kpis=1)
+            kolada.Kpi.kpi(filter_kpis=1)
 
         
-    def test_001_something(self):
+    def Kpi_Key_000(self):
         """Test something."""
         with self.assertRaises(KeyError):
-            Kpi.kpi(filter_kpis='s')
+            kolada.Kpi.kpi(filter_kpis='s')
     
     
-    def test_002_something(self):
+    def Kpi_instance_tuple(self):
         """Test something."""
-        self.assertIsInstance(Kpi.kpi()[0][0], tuple)
+        self.assertIsInstance(kolada.Kpi.kpi()[0][0], tuple)
     
     
-    def test_003_something(self):
+    def Kpi_instance_list(self):
         """Test something."""
-        self.assertIsInstance(Kpi.kpi(inner_type='list')[0][0], list)
+        self.assertIsInstance(kolada.Kpi.kpi(inner_type='list')[0][0], list)
     
-    def test_004_something(self):
+    def Kpi_key_001(self):
         """Test something."""
         with self.assertRaises(KeyError):
-            Kpi.kpi(inner_type='str')
+            kolada.Kpi.kpi(inner_type='str')
     
 
-    def test_005_something(self):
+    def Kpi_type_001(self):
         """Test something."""
         with self.assertRaises(TypeError):
-            Kpi.kpi(inner_type=1)
+            kolada.Kpi.kpi(inner_type=1)
 
             
 
