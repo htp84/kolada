@@ -8,4 +8,4 @@ cache: pip
 install:
  - pip install -r requirements-to-freeze.txt
 script:
- - pytest tests/
+ - pytest
