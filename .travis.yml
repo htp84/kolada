@@ -8,4 +8,4 @@ cache: pip
 install:
  - pip install -r requirements-to-freeze.txt
 script:
- - python tests/test_kolada_api.py
+ - pytest tests/
