@@ -5,3 +5,11 @@ _testing.py
 .ipynb_checkpoints/
 *.ipynb
 wheels/
+*.bat
+conda
+activate
+deactivate
+.cache
+build
+kolada.egg-info
+dist
