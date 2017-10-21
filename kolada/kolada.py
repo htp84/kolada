@@ -27,17 +27,20 @@ class Kpi:
 
         Args:
         **Keyword arguments:
-            filter_kpis (str): Provides a possibilty to filters the kpis. 
-                \'\' is the default option and it returns all kpis
+            filter_kpis (string): Provides a possibilty to filters the kpis. 
+                None is the default option and it returns all kpis
                 If \'K\' is passed only municipality kpis are returned
                 If \'L\' is passed only county kpis are returned\n
-            inner_type (str): Provides a possibilty to decide the inner type
+            inner_type (string): Provides a possibilty to decide the inner type
                 \'tuple\' is the default option and returns a list of tuples
                 \'list\' returns a list of lists\n
-            id_or_name (str): Provides a possibilty to only get the kpi id or the kpi name as a list
-                '' is the default option and it returns both kpi id and kpi name according to the choices made in the other parameters
+            id_or_name (string): Provides a possibilty to only get the kpi id or the kpi name as a list
+                None is the default option and it returns both kpi id and kpi name according to the choices made in the other parameters
                 \'id\' returns only the kpi id's as a list. The returned list depends on the choice in fílter_kpis but not inner_type 
                 \'name\' returns only the kpi names's as a list. The returned list depends on the choice in fílter_kpis but not inner_type   
+            column_names (boolean): Provides a possibilty to get column names. False is the default option\n
+                and returns the data. True returns a tuple with the data and the column names, i.e. ([data], [column_names])\n
+                This keyword will not work if id_or_name is not None.
         
         Returns:
             list of tuples: [(\'id1\', \'name1\'), (\'id2\', \'name2\')...], default return type
@@ -54,7 +57,7 @@ class Kpi:
 
         """
         data = None
-        filter_kpis, inner_type, id_or_name = _control_kpi(kwargs)
+        filter_kpis, inner_type, id_or_name, column_names = _control_kpi(kwargs)
         url = BASE + KPI
         values = requests.get(url).json()['values']
         if filter_kpis is None:
@@ -67,7 +70,10 @@ class Kpi:
             data = [id[0] for id in data]
         elif id_or_name == 'name':
             data = [name[1] for name in data]
-        return data, structure.COLUMNS_ID_TITLE
+        if column_names is True and id_or_name is None:
+            return data, structure.COLUMNS_ID_TITLE
+        else:
+            return data
 
     @classmethod
     def group_names(cls, inner_type='tuple') -> list:
