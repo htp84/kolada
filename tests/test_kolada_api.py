@@ -40,3 +40,7 @@ def test_Kpi_type_001():
     with pytest.raises(TypeError):
         kolada.Kpi.kpi(inner_type=1)
 
+def test_Kpi_type_002():
+    """Test something"""
+    assert len(kolada.Kpi.kpi(column_names=True)) == 2
+
