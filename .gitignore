@@ -13,3 +13,4 @@ deactivate
 build
 kolada.egg-info
 dist
+/.coverage
