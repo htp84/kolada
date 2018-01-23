@@ -1,5 +1,5 @@
 [![Build Status](https://travis-ci.org/htp84/kolada.svg?branch=master)](https://travis-ci.org/htp84/kolada)
-[![Coverage Status](https://coveralls.io/repos/github/htp84/kolada/badge.svg?branch=master)(https://coveralls.io/github/htp84/kolada?branch=master)
+[![Coverage Status](https://coveralls.io/repos/github/htp84/kolada/badge.svg?branch=master)](https://coveralls.io/github/htp84/kolada?branch=master)
 
 ## Kolada
 
