@@ -1,7 +1,16 @@
-__pycache__/
+__pycache__/*
+*/__pycache__/*
+*/*/__pycache__/*
 old.txt
 .vscode/
 _testing.py
 .ipynb_checkpoints/
 *.ipynb
 wheels/
+*.csv
+*.xlsx
+*.egg*
+.mypy_cache/*
+.cache/*
+build/*
+dist/*

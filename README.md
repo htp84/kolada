@@ -4,12 +4,13 @@
 
 The purpuse of this api is to provide an easy way to download data from Kolada using Python 3. The API uses the [requests](https://github.com/requests/requests) module.
 
-Supports Python **3.3+**
+Supports Python **3.6**
 
 ```python
 >>> from kolada import Kpi
->>> DATA_KPI = Kpi.data_per_municipality('N00002', '0860')
->>> print(DATA_KPI)
+>>> kpi = Kpi()
+>>> result = kpi.data_per_municipality('N00002', '0860').data
+>>> print(data))
 ```
 
 For more information about kolada on github see [hypergene/kolada](https://github.com/Hypergene/kolada)
