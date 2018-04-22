@@ -1,10 +1,13 @@
-__pycache__/
+__pycache__/*
+*/__pycache__/*
+*/*/__pycache__/*
 old.txt
 .vscode/
 _testing.py
 .ipynb_checkpoints/
 *.ipynb
 wheels/
+<<<<<<< HEAD
 *.bat
 conda
 activate
@@ -14,3 +17,12 @@ build
 kolada.egg-info
 dist
 /.coverage
+=======
+*.csv
+*.xlsx
+*.egg*
+.mypy_cache/*
+.cache/*
+build/*
+dist/*
+>>>>>>> testClass
