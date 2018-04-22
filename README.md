@@ -1,21 +1,16 @@
+# Kolada
+
 [![Build Status](https://travis-ci.org/htp84/kolada.svg?branch=master)](https://travis-ci.org/htp84/kolada)
-[![Coverage Status](https://coveralls.io/repos/github/htp84/kolada/badge.svg?branch=master)](https://coveralls.io/github/htp84/kolada?branch=master)
 
-## Kolada
+The purpuse of this api is to provide an easy way to download data from Kolada using Python 3. The API uses the [requests](https://github.com/requests/requests) module.
 
-The purpose of this api is to provide an easy way to download data from Kolada using Python 3. The API uses the [requests](https://github.com/requests/requests) module.
-
-<<<<<<< HEAD
-Supports Python **3.4+**
-=======
 Supports Python **3.6**
->>>>>>> testClass
 
 ```python
 >>> from kolada import Kpi
 >>> kpi = Kpi()
 >>> result = kpi.data_per_municipality('N00002', '0860').data
->>> print(data))
+>>> print(result)
 ```
 
 For more information about kolada on github see [hypergene/kolada](https://github.com/Hypergene/kolada)

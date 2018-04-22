@@ -7,17 +7,6 @@ _testing.py
 .ipynb_checkpoints/
 *.ipynb
 wheels/
-<<<<<<< HEAD
-*.bat
-conda
-activate
-deactivate
-.cache
-build
-kolada.egg-info
-dist
-/.coverage
-=======
 *.csv
 *.xlsx
 *.egg*
@@ -25,4 +14,3 @@ dist
 .cache/*
 build/*
 dist/*
->>>>>>> testClass
