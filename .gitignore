@@ -1,4 +1,6 @@
 __pycache__/*
+.idea/*
+.cache/*
 */__pycache__/*
 */*/__pycache__/*
 old.txt
@@ -14,3 +16,4 @@ wheels/
 .cache/*
 build/*
 dist/*
+*.dbf

@@ -1,6 +1,6 @@
 import requests
 from .kolada import Kolada
-from ._json.structure import _metadata, _id_title, _data, _ou
+from ._json.structure import _metadata, _id_title, _data, _ou_structure
 from ._control._controls import _control_kpi
 import kolada._json.structure as structure
 import pandas as pd
@@ -13,51 +13,75 @@ class Ou(Kolada):
 
     """
 
-    def __init__(
-            self,
-            filter_=None,
-    ):
+    def __init__(self, filter_=None):
         super().__init__()
         if isinstance(filter_, str):
             self._filter = filter_.upper()
         else:
             self._filter = None
 
-    def ous(self, search_title='', search_municipality=''):
+    def __str__(self):
+        return self.__class__
+
+    def __repr__(self):
+        print("hej")
+
+    def ous(self, search_title="", search_municipality=""):
         """
 
         """
-        data = []
-        url = self.BASE + self.OU
-        if search_title == '' and search_municipality == '':
-            url = url
-        elif search_title != '' and search_municipality == '':
-            url += '?title=' + search_title
-        elif search_title == '' and search_municipality != '':
-            url += '?municipality=' + search_municipality
-        elif search_title != '' and search_municipality != '':
-            url += '?municipality=' + search_municipality + '&title=' + search_title
-        result = None
-        while result is None:
+        url = None
+        self._data: List = []
+        counter = 0
+        while True:
             try:
-                response = requests.get(url).json()
-                if response['count'] == 0:
+                if counter == 0:
+                    response = self._ou
+                else:
+                    response = requests.get(url).json()
+                if response["count"] == 0:
                     break
                 else:
-                    values = response['values']
-                    page = [_ou(group) for group in values]
-                    data = data + page
-                    url = response['next_page']
+                    values = response["values"]
+                    _page = [_ou_structure(group) for group in values]
+                    print(_page[0])
+                    self._data.extend(_page)
+                    url = response["next_page"]
+                    counter += 1
             except KeyError:
                 break
-        if data == []:
-            return None
-        else:
-            self._data = data
-            self._columns = ['id', 'municiplaity_id', 'title']
-            return self
+        self._columns = ["id", "municipality", "title"]
+        return self
 
+    def data_per_year(
+        self, ous: str, years: str, from_date: Union[None, str] = None
+    ) -> Kolada:
+        """
+        data per given kpi,
 
-#    @classmethod
-#    def data_per_year(cls, ous, years):
-#        url = BASE + DATA + OU + ous
+        if the method returns None then eihter there is no KPI with the given 
+        ID or there is no data for the given KPI during the given year
+        """
+        self.data = self._data_per_year(
+            vars=ous, years=years, _subclass=__class__.__name__, from_date=from_date
+        )
+        self._columns = structure.COLUMNS_DATA
+        return self
+
+    def data_per_municipality(
+        self, ous: str, municipalities: str, from_date: Union[None, str] = None
+    ) -> Kolada:
+        """
+        data per given kpi,
+
+        if the method returns None then eihter there is no KPI with the given 
+        ID or there is no data for the given KPI during the given year
+        """
+        self.data = self._data_per_municipality(
+            vars=ous,
+            municipalities=municipalities,
+            _subclass=__class__.__name__,
+            from_date=from_date,
+        )
+        self._columns = structure.COLUMNS_DATA
+        return self

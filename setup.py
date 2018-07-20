@@ -4,7 +4,11 @@
 
 from setuptools import setup, find_packages
 
-requirements = ['requests']
+requirements = [
+    'requests',
+    'pandas',
+    'openpyxl',
+]
 
 setup(
     name='kolada',
@@ -25,6 +29,8 @@ setup(
         'Intended Audience :: Developers',
         'License :: OSI Approved :: MIT License',
         'Natural Language :: English',
+        'Programming Language :: Python :: 3.4',
+        'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: 3.6',
     ],
 )
