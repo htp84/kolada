@@ -8,6 +8,7 @@ requirements = [
     'requests',
     'pandas',
     'openpyxl',
+    'tablib,'
 ]
 
 setup(
