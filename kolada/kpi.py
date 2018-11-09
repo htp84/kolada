@@ -113,7 +113,12 @@ class Kpi(Kolada):
         return self
 
     def data_per_year(
-        self, kpis: str, years: str, from_date: Union[None, str] = None
+        self,
+        kpis: str,
+        years: str,
+        include_both_kpi_and_municipality: bool = False,
+        vars2: str = "",
+        from_date: Union[None, str] = None,
     ) -> Kolada:
         """
         data per given kpi,
@@ -122,7 +127,12 @@ class Kpi(Kolada):
         ID or there is no data for the given KPI during the given year
         """
         self.data = self._data_per_year(
-            vars=kpis, years=years, _subclass=__class__.__name__, from_date=from_date
+            vars=kpis,
+            years=years,
+            _subclass=__class__.__name__,
+            include_both_kpi_and_municipality=include_both_kpi_and_municipality,
+            vars2=vars2,
+            from_date=from_date,
         )
         self._columns = structure.COLUMNS_DATA
         return self

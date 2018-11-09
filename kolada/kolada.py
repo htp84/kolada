@@ -72,7 +72,13 @@ class Kolada:
         return requests.get(url).json()
 
     def _data_per_year(
-        self, vars: str, years: str, _subclass: str, from_date: Union[None, str] = None
+        self,
+        vars: str,
+        years: str,
+        _subclass: str,
+        include_both_kpi_and_municipality: bool = False,
+        vars2: str = "",
+        from_date: Union[None, str] = None,
     ):
         """
         data per given kpi,
@@ -84,6 +90,13 @@ class Kolada:
             raise TypeError(f"{_subclass}'s must be a string, e.g. 'N00002, N00003'.")
         elif not isinstance(years, str):
             raise TypeError('years must be  a string, e.g. "2016')
+        if include_both_kpi_and_municipality:
+            if "kpi" != self.DATA[_subclass][1]:
+                kpi_or_municipality = "/kpi/"
+            else:
+                kpi_or_municipality = "/municipality/"
+        else:
+            kpi_or_municipality = ""
         if not from_date:
             _from = ""
         else:
@@ -94,6 +107,8 @@ class Kolada:
             + self.DATA[_subclass][1]
             + "/"
             + vars
+            + kpi_or_municipality
+            + vars2
             + "/year/"
             + years
             + _from
@@ -119,6 +134,8 @@ class Kolada:
                 break
         # self._columns = structure.COLUMNS_DATA
         return self
+
+    # denna måste byggas så alla kombinationer kan användas
 
     def _data_per_municipality(
         self,
