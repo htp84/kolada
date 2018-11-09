@@ -13,7 +13,7 @@ requirements = [
 
 setup(
     name='kolada',
-    version='0.3.0',
+    version='0.4.0',
     description="A simple wrapper around the Kolada api",
     long_description='',
     author="Henric Sundberg",
