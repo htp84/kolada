@@ -4,35 +4,30 @@
 
 from setuptools import setup, find_packages
 
-requirements = [
-    'requests',
-    'pandas',
-    'openpyxl',
-    'tablib',
-]
+requirements = ["requests", "pandas", "openpyxl", "tablib"]
 
 setup(
-    name='kolada',
-    version='0.3.0',
+    name="kolada",
+    version="0.4.1",
     description="A simple wrapper around the Kolada api",
-    long_description='',
+    long_description="",
     author="Henric Sundberg",
-    author_email='henric.sundberg@gmail.com',
-    url='https://github.com/htp84/kolada',
+    author_email="henric.sundberg@gmail.com",
+    url="https://github.com/htp84/kolada",
     packages=find_packages(),
     include_package_data=True,
     install_requires=requirements,
     license="MIT license",
     zip_safe=False,
-    keywords='kolada',
+    keywords="kolada",
     classifiers=[
-        'Development Status :: 3 - Alpha',
-        'Intended Audience :: Developers',
-        'License :: OSI Approved :: MIT License',
-        'Natural Language :: English',
-        'Programming Language :: Python :: 3.4',
-        'Programming Language :: Python :: 3.5',
-        'Programming Language :: Python :: 3.6',
-        'Programming Language :: Python :: 3.7',
+        "Development Status :: 3 - Alpha",
+        "Intended Audience :: Developers",
+        "License :: OSI Approved :: MIT License",
+        "Natural Language :: English",
+        "Programming Language :: Python :: 3.4",
+        "Programming Language :: Python :: 3.5",
+        "Programming Language :: Python :: 3.6",
+        "Programming Language :: Python :: 3.7",
     ],
 )
